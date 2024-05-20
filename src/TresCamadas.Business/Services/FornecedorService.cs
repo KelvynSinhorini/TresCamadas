@@ -1,5 +1,6 @@
 ﻿using TresCamadas.Business.Interfaces;
 using TresCamadas.Business.Models;
+using TresCamadas.Business.Models.Validations;
 
 namespace TresCamadas.Business.Services;
 
@@ -14,7 +15,9 @@ public class FornecedorService : BaseService, IFornecedorService
 
     public async Task Adicionar(Fornecedor fornecedor)
     {
-        // Validar se a entidade é consistente...
+        if (!ExecutarValidacao(new FornecedorValidation(), fornecedor ) ||
+            !ExecutarValidacao(new EnderecoValidation(), fornecedor.Endereco)) 
+            return;
 
         // Validar se ja nao existe outro fornecedor com o mesmo doc.
 
@@ -23,6 +26,9 @@ public class FornecedorService : BaseService, IFornecedorService
 
     public async Task Atualizar(Fornecedor fornecedor)
     {
+        if (!ExecutarValidacao(new FornecedorValidation(), fornecedor))
+            return;
+
         await _fornecedorRepository.Atualizar(fornecedor);
     }
 
