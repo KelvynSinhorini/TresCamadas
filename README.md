@@ -6,6 +6,9 @@ Projeto construído para estudar mais a fundo a arquitetura de três camadas.
 
 - .NET: 8.0
 - FluentValidator: 11.9.1
+- EntityFrameworkCore 8.0.5
+- EntityFrameworkCore.Relational 8.0.5
+- EntityFrameworkCore.SqlServer 8.0.5
 
 ## Estrutura do Projeto
 
