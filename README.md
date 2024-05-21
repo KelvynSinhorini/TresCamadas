@@ -9,6 +9,8 @@ Projeto construído para estudar mais a fundo a arquitetura de três camadas.
 - EntityFrameworkCore 8.0.5
 - EntityFrameworkCore.Relational 8.0.5
 - EntityFrameworkCore.SqlServer 8.0.5
+- EntityFrameworkCore.Tools 8.0.5
+- EntityFrameworkCore.Design 8.0.5
 
 ## Estrutura do Projeto
 
