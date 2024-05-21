@@ -11,6 +11,7 @@ Projeto construído para estudar mais a fundo a arquitetura de três camadas.
 - EntityFrameworkCore.SqlServer 8.0.5
 - EntityFrameworkCore.Tools 8.0.5
 - EntityFrameworkCore.Design 8.0.5
+- AutoMapper 13.0.1
 
 ## Estrutura do Projeto
 
