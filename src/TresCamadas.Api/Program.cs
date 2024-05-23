@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using TresCamadas.Api.Configurations;
 using TresCamadas.Data.Context;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -14,6 +15,8 @@ builder.Services.AddDbContext<TresCamadasDbContext>(options =>
 });
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.ResolveDependencies();
 
 var app = builder.Build();
 
