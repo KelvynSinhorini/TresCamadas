@@ -19,6 +19,12 @@ public class ProdutoService : BaseService, IProdutoService
         if (!ExecutarValidacao(new ProdutoValidation(), produto))
             return;
 
+        if(_produtoRepository.ObterPorId(produto.Id) != null)
+        {
+            Notificar("Já existe um produto com o ID infomado.");
+            return;
+        }
+
         await _produtoRepository.Adicionar(produto);
     }
 

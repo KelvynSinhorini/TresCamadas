@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using TresCamadas.Api.ViewModels;
 using TresCamadas.Business.Interfaces;
 using TresCamadas.Business.Models;
@@ -15,7 +16,8 @@ public class FornecedoresController : MainController
 
     public FornecedoresController(IMapper mapper,
                                   IFornecedorRepository fornecedorRepository,
-                                  IFornecedorService fornecedorService)
+                                  IFornecedorService fornecedorService,
+                                  INotificador notificador) : base(notificador)
     {
         _mapper = mapper;
         _fornecedorRepository = fornecedorRepository;
@@ -45,7 +47,7 @@ public class FornecedoresController : MainController
 
         await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
 
-        return CustomResponse(fornecedorViewModel);
+        return CustomResponse(HttpStatusCode.Created, fornecedorViewModel);
     }
 
     [HttpPut("{id:guid}")]
@@ -61,7 +63,7 @@ public class FornecedoresController : MainController
 
         await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
 
-        return CustomResponse();
+        return CustomResponse(HttpStatusCode.NoContent);
     }
 
     [HttpDelete("{id:guid}")]
@@ -69,7 +71,7 @@ public class FornecedoresController : MainController
     {
         await _fornecedorService.Remover(id);
 
-        return CustomResponse();
+        return CustomResponse(HttpStatusCode.NoContent);
     }
 
     private async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid id)

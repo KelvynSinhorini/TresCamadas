@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 using TresCamadas.Api.ViewModels;
 using TresCamadas.Business.Interfaces;
 using TresCamadas.Business.Models;
@@ -15,7 +16,8 @@ public class ProdutosController : MainController
 
     public ProdutosController(IProdutoRepository produtoRepository,
                               IProdutoService produtoService,
-                              IMapper mapper)
+                              IMapper mapper,
+                              INotificador notificador) : base(notificador)
     {
         _produtoRepository = produtoRepository;
         _produtoService = produtoService;
@@ -45,7 +47,7 @@ public class ProdutosController : MainController
 
         await _produtoService.Adicionar(_mapper.Map<Produto>(produtoViewModel));
 
-        return CustomResponse(produtoViewModel);
+        return CustomResponse(HttpStatusCode.Created, produtoViewModel);
     }
 
     [HttpPut("{id:guid}")]
@@ -69,7 +71,7 @@ public class ProdutosController : MainController
 
         await _produtoService.Atualizar(_mapper.Map<Produto>(produtoAtualizacao));
 
-        return CustomResponse();
+        return CustomResponse(HttpStatusCode.NoContent);
     }
 
     [HttpDelete("{id:guid}")]
@@ -81,7 +83,7 @@ public class ProdutosController : MainController
 
         await _produtoService.Remover(id);
 
-        return CustomResponse();
+        return CustomResponse(HttpStatusCode.NoContent);
     }
 
     private async Task<ProdutoViewModel> ObterProduto(Guid id)
