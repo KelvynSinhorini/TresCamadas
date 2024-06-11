@@ -25,32 +25,71 @@ public class FornecedoresController : MainController
     }
 
     [HttpGet]
-    public async Task<IEnumerable<FornecedorViewModel>> ObterTodos()
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+    public async Task<ActionResult<IEnumerable<FornecedorViewModel>>> ObterTodos()
     {
-        return _mapper.Map<IEnumerable<FornecedorViewModel>>(await _fornecedorRepository.ObterTodos());
+        try
+        {
+            var fornecedores = await _fornecedorRepository.ObterTodos();
+            return Ok(_mapper.Map<IEnumerable<FornecedorViewModel>>(fornecedores));
+        }
+        catch (Exception ex)
+        {
+            // Logar o erro
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno ao obter fornecedores.");
+        }
     }
-
+    
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<FornecedorViewModel>> ObterPorId(Guid id)
     {
-        var fornecedor = await ObterFornecedorProdutosEndereco(id);
+        try
+        {
+            var fornecedor = await ObterFornecedorProdutosEndereco(id);
 
-        if (fornecedor == null) return NotFound();
+            if (fornecedor == null) return NotFound();
 
-        return fornecedor;
+            return Ok(fornecedor);
+        }
+        catch (Exception ex)
+        {
+            // Logar o erro
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno ao obter fornecedor.");
+        }
     }
 
     [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(FornecedorViewModel), StatusCodes.Status201Created)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<FornecedorViewModel>> Adicionar(FornecedorViewModel fornecedorViewModel)
     {
-        if (!ModelState.IsValid) return CustomResponse(ModelState);
+        if (!ModelState.IsValid)
+            return CustomResponse(ModelState);
 
-        await _fornecedorService.Adicionar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+        try
+        {
+            var fornecedor = _mapper.Map<Fornecedor>(fornecedorViewModel);
+            await _fornecedorService.Adicionar(fornecedor);
 
-        return CustomResponse(HttpStatusCode.Created, fornecedorViewModel);
+            return CustomResponse(HttpStatusCode.Created, fornecedorViewModel);
+        }
+        catch (Exception ex)
+        {
+            // Logar o erro
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno ao adicionar fornecedor.");
+        }
     }
 
     [HttpPut("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<FornecedorViewModel>> Atualizar(Guid id, FornecedorViewModel fornecedorViewModel)
     {
         if (id != fornecedorViewModel.Id)
@@ -61,17 +100,44 @@ public class FornecedoresController : MainController
 
         if (!ModelState.IsValid) return CustomResponse(ModelState);
 
-        await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+        try
+        {
+            var fornecedor = await _fornecedorRepository.ObterPorId(id);
+            if (fornecedor == null)
+                return NotFound("Fornecedor não encontrado.");
 
-        return CustomResponse(HttpStatusCode.NoContent);
+            await _fornecedorService.Atualizar(_mapper.Map<Fornecedor>(fornecedorViewModel));
+            return CustomResponse(HttpStatusCode.NoContent);
+        }
+        catch (Exception ex)
+        {
+            // Logar o erro
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno ao atualizar fornecedor.");
+        }
     }
 
     [HttpDelete("{id:guid}")]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    [ProducesResponseType(StatusCodes.Status500InternalServerError)]
     public async Task<ActionResult<FornecedorViewModel>> Excluir(Guid id)
     {
-        await _fornecedorService.Remover(id);
+        try
+        {
+            var fornecedor = await _fornecedorRepository.ObterPorId(id);
+            if (fornecedor == null)
+                return NotFound("Fornecedor não encontrado.");
 
-        return CustomResponse(HttpStatusCode.NoContent);
+            await _fornecedorService.Remover(id);
+
+            return CustomResponse(HttpStatusCode.NoContent);
+        }
+        catch (Exception ex)
+        {
+            // Logar o erro
+            return StatusCode(StatusCodes.Status500InternalServerError, "Erro interno ao excluir fornecedor.");
+        }
     }
 
     private async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid id)
