@@ -102,7 +102,7 @@ public class FornecedoresController : MainController
 
         try
         {
-            var fornecedor = await _fornecedorRepository.ObterPorId(id);
+            var fornecedor = await ObterFornecedorEndereco(id);
             if (fornecedor == null)
                 return NotFound("Fornecedor não encontrado.");
 
@@ -125,7 +125,7 @@ public class FornecedoresController : MainController
     {
         try
         {
-            var fornecedor = await _fornecedorRepository.ObterPorId(id);
+            var fornecedor = await ObterFornecedorEndereco(id);
             if (fornecedor == null)
                 return NotFound("Fornecedor não encontrado.");
 
@@ -143,5 +143,10 @@ public class FornecedoresController : MainController
     private async Task<FornecedorViewModel> ObterFornecedorProdutosEndereco(Guid id)
     {
         return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorProdutosEndereco(id));
+    }
+
+    private async Task<FornecedorViewModel> ObterFornecedorEndereco(Guid id)
+    {
+        return _mapper.Map<FornecedorViewModel>(await _fornecedorRepository.ObterFornecedorEndereco(id));
     }
 }
