@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using TresCamadas.Api.Data;
+using TresCamadas.Api.Extensions;
 
 namespace TresCamadas.Api.Configurations;
 
@@ -15,6 +16,7 @@ public static class IdentityConfig
         services.AddDefaultIdentity<IdentityUser>()
             .AddRoles<IdentityRole>()
             .AddEntityFrameworkStores<ApplicationDbContext>()
+            .AddErrorDescriber<IdentityMensagensPortugues>()
             .AddDefaultTokenProviders();
 
         return services;
