@@ -9,7 +9,9 @@
 
   <ItemGroup>
     <PackageReference Include="automapper" Version="13.0.1" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="8.0.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
@@ -20,6 +22,11 @@
   <ItemGroup>
     <ProjectReference Include="..\TresCamadas.Business\TresCamadas.Business.csproj" />
     <ProjectReference Include="..\TresCamadas.Data\TresCamadas.Data.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+    <Folder Include="wwwroot\imagens\" />
   </ItemGroup>
 
 </Project>

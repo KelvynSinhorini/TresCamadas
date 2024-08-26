@@ -20,7 +20,6 @@ public abstract class MainController : ControllerBase
     {
         return !_notificador.TemNotificacao();
     }
-
     protected ActionResult CustomResponse(HttpStatusCode statusCode = HttpStatusCode.OK, object result = null)
     {
         if (OperacaoValida())

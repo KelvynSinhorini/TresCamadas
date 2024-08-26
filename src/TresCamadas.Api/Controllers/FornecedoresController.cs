@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using TresCamadas.Api.ViewModels;
@@ -7,6 +8,7 @@ using TresCamadas.Business.Models;
 
 namespace TresCamadas.Api.Controllers;
 
+[Authorize]
 [Route("api/fornecedores")]
 public class FornecedoresController : MainController
 {
@@ -24,6 +26,7 @@ public class FornecedoresController : MainController
         _fornecedorService = fornecedorService;
     }
 
+    [AllowAnonymous]
     [HttpGet]
     [ProducesResponseType(StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status500InternalServerError)]
